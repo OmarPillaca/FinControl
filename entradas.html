@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinControl — Entradas</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/movimientos.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">💰</div>
+        <span>FinControl</span>
+      </div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" data-theme-toggle type="button">
+          <span class="theme-icon">🌙</span>
+          <span class="theme-label">Modo oscuro</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="page-header">
+        <h1>⬆️ Registrar entrada</h1>
+        <div class="header-actions">
+          <button class="btn-icon" data-theme-toggle type="button" title="Cambiar tema">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="alert alert-error" id="income-alert"></div>
+      <div class="alert alert-success" id="income-success"></div>
+
+      <!-- Formulario de entrada -->
+      <section class="card">
+        <form id="income-form" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="inc-amount">Monto <span class="req">*</span></label>
+              <input type="text" id="inc-amount" inputmode="decimal" placeholder="0.00">
+              <span class="field-error" id="err-inc-amount">Ingresa un monto mayor que cero.</span>
+            </div>
+
+            <div class="field">
+              <label for="inc-date">Fecha <span class="req">*</span></label>
+              <input type="date" id="inc-date">
+              <span class="field-error" id="err-inc-date">Selecciona una fecha.</span>
+            </div>
+
+            <div class="field full">
+              <label for="inc-account">Cuenta de destino <span class="req">*</span></label>
+              <select id="inc-account">
+                <option value="">— Selecciona una cuenta —</option>
+              </select>
+              <span class="field-error" id="err-inc-account">Debes seleccionar una cuenta.</span>
+            </div>
+
+            <div class="field full">
+              <label>Origen del ingreso</label>
+              <div class="chip-options" id="inc-source-options"></div>
+            </div>
+
+            <div class="field full">
+              <label for="inc-desc">Descripción / concepto <span class="optional-hint">(opcional)</span></label>
+              <input type="text" id="inc-desc" maxlength="120" placeholder="Ej: Pago de trabajo, sueldo…">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Guardar entrada</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Entradas recientes -->
+      <h2 class="section-title" style="margin-top: 24px;">⬆️ Entradas registradas</h2>
+      <div id="incomes-list"></div>
+      <div id="incomes-empty" class="empty-state" hidden>
+        <div class="empty-icon">⬆️</div>
+        <p>Aún no hay entradas registradas.</p>
+      </div>
+    </main>
+
+    <nav class="bottom-nav" id="bottom-nav"></nav>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-title">Confirmar</h2>
+      <p id="modal-text"></p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="modal-cancel" type="button">Cancelar</button>
+        <button class="btn btn-danger" id="modal-ok" type="button">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/entradas.js"></script>
+</body>
+</html>

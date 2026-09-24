@@ -1,0 +1,151 @@
+/* =========================================================
+   movimientos.css — Historial y listas de movimientos
+   ========================================================= */
+
+/* ---------- Agrupación por fecha ---------- */
+.mov-group-date {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 18px 2px 8px;
+}
+
+.mov-group-date:first-child { margin-top: 0; }
+
+/* ---------- Tarjeta de lista ---------- */
+.mov-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 16px;
+  box-shadow: var(--shadow);
+}
+
+.mov-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.mov-row:last-child { border-bottom: none; }
+
+.mov-row .mov-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.mov-row.income .mov-icon { background: var(--income-bg); }
+.mov-row.expense .mov-icon { background: var(--expense-bg); }
+
+.mov-row .mov-info { flex: 1; min-width: 0; }
+
+.mov-row .mov-desc {
+  font-weight: 600;
+  font-size: 0.94rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mov-row .mov-meta {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.mov-row .mov-amount {
+  font-weight: 700;
+  white-space: nowrap;
+  font-size: 0.98rem;
+}
+
+.mov-row.income .mov-amount { color: var(--income); }
+.mov-row.expense .mov-amount { color: var(--expense); }
+
+.mov-row .mov-actions { display: flex; gap: 6px; }
+
+.mov-row .btn-del {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--expense);
+  font-size: 0.95rem;
+  display: grid;
+  place-items: center;
+  transition: border-color 0.15s;
+}
+
+.mov-row .btn-del:hover { border-color: var(--expense); }
+
+/* ---------- Filtros ---------- */
+.filters-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.filters-bar select,
+.filters-bar input {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  color: var(--text);
+  outline: none;
+}
+
+.filters-bar select:focus,
+.filters-bar input:focus { border-color: var(--cian); }
+
+/* ---------- Selector de categoría (chips) ---------- */
+.chip-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.chip-option:hover { border-color: var(--cian); }
+
+.chip-option.selected {
+  border-color: var(--cian);
+  background: rgba(0, 184, 217, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+}
+
+/* ---------- Ayuda de campo opcional ---------- */
+.optional-hint {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  font-weight: 400;
+}

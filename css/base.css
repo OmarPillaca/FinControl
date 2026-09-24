@@ -1,0 +1,399 @@
+/* =========================================================
+   base.css — Variables, layout, navegación y componentes
+   comunes (FinControl)
+   ========================================================= */
+
+/* --------------------- Temas --------------------- */
+:root {
+  --celeste: #4fc3f7;
+  --cian: #00b8d9;
+  --azul: #0277bd;
+  --grad: linear-gradient(135deg, var(--azul), var(--cian));
+
+  --bg: #eef5fb;
+  --surface: #ffffff;
+  --surface-2: #f4f9fd;
+  --border: #dbe7f2;
+  --text: #10222e;
+  --text-2: #5a7080;
+  --income: #00897b;
+  --income-bg: #e0f2f1;
+  --expense: #e53935;
+  --expense-bg: #ffebee;
+  --shadow: 0 2px 10px rgba(2, 119, 189, 0.08);
+  --radius: 14px;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0e14;
+  --surface: #121821;
+  --surface-2: #1a2230;
+  --border: #223041;
+  --text: #e8f1f8;
+  --text-2: #8fa6b8;
+  --income: #4ddbc4;
+  --income-bg: #0f2b26;
+  --expense: #ff6b6b;
+  --expense-bg: #2a1518;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* --------------------- Reset --------------------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; }
+a { text-decoration: none; color: inherit; }
+
+/* --------------------- Layout --------------------- */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 12px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px 20px;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.brand .logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--grad);
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: var(--text-2);
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-link:hover { background: var(--surface-2); color: var(--text); }
+
+.nav-link.active {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+
+.nav-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+
+.sidebar-footer { margin-top: auto; padding: 10px; }
+
+.content {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 28px 90px;
+  max-width: 1100px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* --------------------- Barra inferior (móvil) --------------------- */
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  justify-content: space-around;
+  padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+  z-index: 50;
+}
+
+.bottom-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.62rem;
+  color: var(--text-2);
+  padding: 4px 8px;
+  border-radius: 10px;
+  min-width: 48px;
+}
+
+.bottom-link .nav-icon { font-size: 1.25rem; width: auto; }
+.bottom-link.active { color: var(--cian); font-weight: 600; }
+
+/* --------------------- Cabecera de página --------------------- */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.page-header h1 { font-size: 1.5rem; }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+
+/* --------------------- Botones --------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: transform 0.12s, box-shadow 0.12s, background 0.15s;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(0, 184, 217, 0.35);
+}
+
+.btn-primary:hover { filter: brightness(1.08); }
+
+.btn-outline {
+  background: var(--surface);
+  color: var(--azul);
+  border: 1.5px solid var(--cian);
+}
+
+[data-theme="dark"] .btn-outline { color: var(--celeste); }
+
+.btn-outline:hover { background: var(--surface-2); }
+
+.btn-danger {
+  background: var(--expense-bg);
+  color: var(--expense);
+  border: 1.5px solid transparent;
+}
+
+.btn-danger:hover { filter: brightness(0.96); }
+
+.btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  font-size: 1.1rem;
+  display: inline-grid;
+  place-items: center;
+}
+
+.btn-icon:hover { border-color: var(--cian); }
+
+.btn-sm { padding: 7px 12px; font-size: 0.85rem; }
+
+/* --------------------- Tarjetas --------------------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.section-title {
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --------------------- Formularios --------------------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+
+.field.full { grid-column: 1 / -1; }
+
+.field label { font-size: 0.85rem; font-weight: 600; color: var(--text-2); }
+
+.field label .req { color: var(--expense); }
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--surface-2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--cian);
+  box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+}
+
+.field input.invalid,
+.field select.invalid { border-color: var(--expense); }
+
+.field-error {
+  color: var(--expense);
+  font-size: 0.8rem;
+  display: none;
+}
+
+.field-error.visible { display: block; }
+
+.form-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* --------------------- Alertas y avisos --------------------- */
+.alert {
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  margin-bottom: 14px;
+  display: none;
+}
+
+.alert.visible { display: block; }
+
+.alert-error { background: var(--expense-bg); color: var(--expense); border: 1px solid var(--expense); }
+.alert-success { background: var(--income-bg); color: var(--income); border: 1px solid var(--income); }
+
+/* --------------------- Estados vacíos --------------------- */
+.empty-state {
+  text-align: center;
+  padding: 36px 16px;
+  color: var(--text-2);
+}
+
+.empty-state .empty-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.empty-state p { margin-bottom: 14px; }
+
+/* --------------------- Modal --------------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 15, 25, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 22px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal h2 { font-size: 1.15rem; margin-bottom: 12px; }
+
+.modal p { color: var(--text-2); font-size: 0.92rem; margin-bottom: 16px; }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* --------------------- Chip de tipo --------------------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--surface-2);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+}
+
+/* --------------------- Responsive --------------------- */
+@media (max-width: 860px) {
+  .sidebar { display: none; }
+  .bottom-nav { display: flex; }
+  .content { padding: 16px 14px 96px; }
+  .page-header h1 { font-size: 1.25rem; }
+}
+
+/* Toggle de tema en sidebar */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 500;
+  transition: border-color 0.15s;
+}
+
+.theme-toggle-btn:hover { border-color: var(--cian); }

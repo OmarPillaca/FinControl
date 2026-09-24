@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinControl — Papelera</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/papelera.css">
+  <link rel="stylesheet" href="css/movimientos.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">💰</div>
+        <span>FinControl</span>
+      </div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" data-theme-toggle type="button">
+          <span class="theme-icon">🌙</span>
+          <span class="theme-label">Modo oscuro</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="page-header">
+        <h1>🗑️ Papelera</h1>
+        <div class="header-actions">
+          <button class="btn btn-danger" id="empty-trash-btn" type="button">Vaciar papelera</button>
+          <button class="btn-icon" data-theme-toggle type="button" title="Cambiar tema">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="alert alert-error" id="trash-alert"></div>
+
+      <p style="color: var(--text-2); font-size: 0.9rem; margin-bottom: 16px;">
+        Los elementos aquí pueden restaurarse o eliminarse definitivamente.
+        Al restaurar un movimiento, vuelve a afectar el saldo de su cuenta.
+      </p>
+
+      <div id="trash-list" class="trash-list"></div>
+      <div id="trash-empty" class="empty-state" hidden>
+        <div class="empty-icon">🗑️</div>
+        <p>La papelera está vacía.</p>
+      </div>
+    </main>
+
+    <nav class="bottom-nav" id="bottom-nav"></nav>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-title">Confirmar</h2>
+      <p id="modal-text"></p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="modal-cancel" type="button">Cancelar</button>
+        <button class="btn btn-danger" id="modal-ok" type="button">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/papelera.js"></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+/* =========================================================
+   cuentas.css — Gestión de cuentas y tarjetas (FinControl)
+   ========================================================= */
+
+.accounts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.account-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.account-card:hover { transform: translateY(-3px); border-color: var(--cian); }
+
+.account-card .acc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-card .acc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--grad);
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.account-card .acc-name { font-weight: 700; font-size: 1rem; }
+
+.account-card .acc-balance {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--azul);
+}
+
+[data-theme="dark"] .account-card .acc-balance { color: var(--celeste); }
+
+.account-card .acc-details {
+  font-size: 0.82rem;
+  color: var(--text-2);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.account-card .card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Barra de uso para tarjetas de crédito */
+.usage-bar {
+  height: 7px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.usage-bar .usage-fill {
+  height: 100%;
+  background: var(--grad);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.account-card .acc-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Selector de tipo en formulario (tarjetas clicables) */
+.type-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.type-option {
+  flex: 1;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  padding: 11px 12px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.type-option:hover { border-color: var(--cian); }
+
+.type-option.selected {
+  border-color: var(--cian);
+  background: rgba(0, 184, 217, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+}
+
+/* Campos exclusivos de tarjeta */
+.card-only-fields {
+  display: none;
+  grid-column: 1 / -1;
+  border-top: 1px dashed var(--border);
+  padding-top: 14px;
+  margin-top: 4px;
+}
+
+.card-only-fields.visible { display: grid; gap: 14px; }
+
+.card-only-fields .field-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}

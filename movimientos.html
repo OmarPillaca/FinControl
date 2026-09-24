@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinControl — Movimientos</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/movimientos.css">
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">💰</div>
+        <span>FinControl</span>
+      </div>
+      <nav id="sidebar-nav"></nav>
+      <div class="sidebar-footer">
+        <button class="theme-toggle-btn" data-theme-toggle type="button">
+          <span class="theme-icon">🌙</span>
+          <span class="theme-label">Modo oscuro</span>
+        </button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="page-header">
+        <h1>📋 Historial de movimientos</h1>
+        <div class="header-actions">
+          <button class="btn-icon" data-theme-toggle type="button" title="Cambiar tema">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Filtros -->
+      <section class="filters-bar">
+        <select id="filter-type" aria-label="Filtrar por tipo">
+          <option value="all">Todos</option>
+          <option value="income">Solo entradas</option>
+          <option value="expense">Solo salidas</option>
+        </select>
+        <select id="filter-account" aria-label="Filtrar por cuenta">
+          <option value="all">Todas las cuentas</option>
+        </select>
+        <select id="filter-sort" aria-label="Ordenar">
+          <option value="desc">Más recientes primero</option>
+          <option value="asc">Más antiguos primero</option>
+        </select>
+      </section>
+
+      <!-- Resumen filtrado -->
+      <div id="mov-summary" class="chip" style="margin-bottom: 14px;"></div>
+
+      <!-- Lista -->
+      <div id="movements-list"></div>
+      <div id="movements-empty" class="empty-state" hidden>
+        <div class="empty-icon">📋</div>
+        <p>No hay movimientos registrados todavía.</p>
+      </div>
+    </main>
+
+    <nav class="bottom-nav" id="bottom-nav"></nav>
+  </div>
+
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <h2 id="modal-title">Confirmar</h2>
+      <p id="modal-text"></p>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="modal-cancel" type="button">Cancelar</button>
+        <button class="btn btn-danger" id="modal-ok" type="button">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/shared.js"></script>
+  <script src="js/movimientos.js"></script>
+</body>
+</html>

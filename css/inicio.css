@@ -1,0 +1,178 @@
+/* =========================================================
+   inicio.css — Página principal (FinControl)
+   ========================================================= */
+
+/* ---------- Tarjeta de TOTAL general ---------- */
+.total-hero {
+  background: var(--grad);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 26px 24px;
+  box-shadow: 0 8px 24px rgba(0, 120, 180, 0.35);
+  margin-bottom: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.total-hero::after {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.total-hero .total-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.85;
+}
+
+.total-hero .total-amount {
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+.total-hero .total-sub {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* ---------- Fila de mini-totales ---------- */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+}
+
+.stat-card .stat-label {
+  font-size: 0.78rem;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-card .stat-value { font-size: 1.15rem; font-weight: 700; margin-top: 4px; }
+
+.stat-income .stat-value { color: var(--income); }
+.stat-expense .stat-value { color: var(--expense); }
+
+/* ---------- Acciones rápidas ---------- */
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+/* ---------- Grid principal ---------- */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.home-grid .accounts-widget { grid-column: 1; }
+.home-grid .movements-widget { grid-column: 2; grid-row: 1 / span 2; }
+.home-grid .widget-wide { grid-column: 1; }
+
+/* ---------- Mini tarjetas de cuenta ---------- */
+.mini-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mini-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.mini-account .acc-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--grad);
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.mini-account .acc-info { flex: 1; min-width: 0; }
+.mini-account .acc-name { font-weight: 600; font-size: 0.95rem; }
+.mini-account .acc-type { font-size: 0.78rem; color: var(--text-2); }
+.mini-account .acc-balance { font-weight: 700; color: var(--azul); }
+
+[data-theme="dark"] .mini-account .acc-balance { color: var(--celeste); }
+
+/* ---------- Lista compacta de movimientos ---------- */
+.mov-list { display: flex; flex-direction: column; }
+
+.mov-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 2px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mov-item:last-child { border-bottom: none; }
+
+.mov-item .mov-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.mov-item.income .mov-icon { background: var(--income-bg); }
+.mov-item.expense .mov-icon { background: var(--expense-bg); }
+
+.mov-item .mov-info { flex: 1; min-width: 0; }
+.mov-item .mov-desc {
+  font-weight: 600;
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mov-item .mov-meta { font-size: 0.78rem; color: var(--text-2); }
+
+.mov-item .mov-amount { font-weight: 700; white-space: nowrap; }
+.mov-item.income .mov-amount { color: var(--income); }
+.mov-item.expense .mov-amount { color: var(--expense); }
+
+@media (max-width: 860px) {
+  .home-grid { grid-template-columns: 1fr; }
+  .home-grid .accounts-widget,
+  .home-grid .movements-widget,
+  .home-grid .widget-wide {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
