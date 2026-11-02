@@ -20,28 +20,51 @@ function bindFilters() {
   });
 }
 
-/** Rellena el filtro de cuentas preservando la opción "Todas" y la selección actual */
+/**
+ * Rellena el filtro de cuentas preservando la selección actual.
+ * [MODIFICADO] Opciones: todas las cuentas (incluye billetera, vista
+ * predeterminada) · solo billetera · una cuenta específica.
+ */
 function refreshAccountFilter() {
   const sel = document.getElementById('filter-account');
   const prev = sel.value || 'all';
   sel.innerHTML =
-    '<option value="all">Todas las cuentas</option>' +
+    '<option value="all">Todas las cuentas (incluye billetera)</option>' +
+    '<option value="wallet">📱 Solo billetera</option>' +
     getAccounts()
-      .filter((a) => a.status === 'active')
-      .map((a) => `<option value="${a.id}">${escapeHtml(a.name)}</option>`)
+      .map((a) => `<option value="${a.id}">${getAccountType(a.type).icon} ${escapeHtml(a.name)}${a.status === 'active' ? '' : ' (inactiva)'}</option>`)
       .join('');
   if ([...sel.options].some((o) => o.value === prev)) sel.value = prev;
 }
 
+/** [NUEVO] IDs de las cuentas de tipo billetera */
+function getWalletAccountIds() {
+  return getAccounts().filter((a) => a.type === 'wallet').map((a) => a.id);
+}
+
+/**
+ * [NUEVO] IDs de cuenta que definen la "perspectiva" del filtro actual.
+ * Sirve para mostrar las transferencias como + (entra) o − (sale).
+ */
+function getFilterAccountIds() {
+  const account = document.getElementById('filter-account').value;
+  if (account === 'all') return [];
+  if (account === 'wallet') return getWalletAccountIds();
+  return [account];
+}
+
 function getFilteredMovements() {
   const type = document.getElementById('filter-type').value;
-  const account = document.getElementById('filter-account').value;
   const sort = document.getElementById('filter-sort').value;
+  const ids = getFilterAccountIds();
 
   let list = [...getMovements()];
 
   if (type !== 'all') list = list.filter((m) => m.type === type);
-  if (account !== 'all') list = list.filter((m) => m.accountId === account);
+  // [MODIFICADO] una transferencia aparece en la cuenta de origen Y en la de destino
+  if (ids.length || document.getElementById('filter-account').value === 'wallet') {
+    list = list.filter((m) => ids.includes(m.accountId) || ids.includes(m.toAccountId));
+  }
 
   list.sort((a, b) => (sort === 'asc' ? a.date - b.date : b.date - a.date));
   return list;
@@ -56,10 +79,12 @@ function renderMovements() {
   // Resumen del filtro actual
   const incomes = sumMovements(list.filter((m) => m.type === 'income'));
   const expenses = sumMovements(list.filter((m) => m.type === 'expense'));
+  const transfers = sumMovements(list.filter((m) => m.type === 'transfer')); // [NUEVO]
   document.getElementById('mov-summary').innerHTML =
-    `<span>⬆️ ${formatCurrency(incomes)}</span>&nbsp;&nbsp;<span>⬇️ ${formatCurrency(expenses)}</span>`;
+    `<span>⬆️ ${formatCurrency(incomes)}</span>&nbsp;&nbsp;<span>⬇️ ${formatCurrency(expenses)}</span>&nbsp;&nbsp;<span>🔄 ${formatCurrency(transfers)}</span>`;
 
   // Agrupar por día
+  const perspective = getFilterAccountIds(); // [NUEVO] signo de transferencias según la cuenta filtrada
   const groups = groupByDate(list);
   if (!groups.length) {
     wrap.innerHTML = '';
@@ -68,7 +93,7 @@ function renderMovements() {
       .map((g) => `
         <div class="mov-group-date">${formatDate(g.date)}</div>
         <div class="mov-card">${g.items
-          .map((m) => renderMovementRow(m, accounts, { onDelete: true }))
+          .map((m) => renderMovementRow(m, accounts, { onDelete: true, perspective }))
           .join('')}</div>`)
       .join('');
   }

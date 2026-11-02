@@ -176,3 +176,62 @@
     grid-row: auto;
   }
 }
+
+/* =========================================================
+   [NUEVO] Billetera: indicador en el total y tarjeta propia
+   ========================================================= */
+
+/* Indicador dentro de la tarjeta de total (incluida / excluida / oculta) */
+.wallet-indicator {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+  margin-top: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.wallet-indicator.off { background: rgba(0, 0, 0, 0.18); }
+
+/* Tarjeta de billetera */
+.wallet-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 22px;
+}
+
+.wallet-card[hidden] { display: none; }
+
+.wallet-main { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1; }
+
+.wallet-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--grad);
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.wallet-info { min-width: 0; }
+.wallet-title { font-size: 0.78rem; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.5px; }
+.wallet-balance { font-size: 1.4rem; font-weight: 800; color: var(--azul); }
+[data-theme="dark"] .wallet-balance { color: var(--celeste); }
+.wallet-detail { font-size: 0.78rem; color: var(--text-2); margin-top: 2px; }
+
+.wallet-toggle { display: flex; align-items: center; gap: 10px; }
+.wallet-toggle-label { font-size: 0.85rem; font-weight: 600; color: var(--text-2); }

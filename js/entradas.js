@@ -2,28 +2,55 @@
    entradas.js — Registro de entradas de dinero (FinControl)
    ========================================================= */
 
-let selectedSource = 'other';
+let selectedSource = ''; // [MODIFICADO] id de la categoría elegida (de la cuenta seleccionada)
 const showModal = setupConfirmModal();
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('inc-date').value = todayIso();
-  buildSourceOptions();
   populateAccountSelect(document.getElementById('inc-account'), getAccounts());
+  buildSourceOptions();
+  // [NUEVO] Al cambiar de cuenta se muestran SUS categorías de ingreso
+  document.getElementById('inc-account').addEventListener('change', buildSourceOptions);
   bindIncomeForm();
   renderIncomes();
 });
 
+/**
+ * [MODIFICADO] Chips de categorías de ingreso de la cuenta seleccionada
+ * (antes era una lista fija). Incluye acceso al gestor de categorías.
+ */
 function buildSourceOptions() {
   const wrap = document.getElementById('inc-source-options');
-  wrap.innerHTML = INCOME_SOURCES.map(
-    (s) => `<button type="button" class="chip-option ${s.id === 'other' ? 'selected' : ''}" data-source="${s.id}">${s.icon} ${s.label}</button>`
-  ).join('');
+  const accountId = document.getElementById('inc-account').value;
 
-  wrap.querySelectorAll('.chip-option').forEach((btn) => {
+  if (!accountId) {
+    selectedSource = '';
+    wrap.innerHTML = '<span class="cat-hint">Selecciona una cuenta para ver sus categorías de ingreso.</span>';
+    return;
+  }
+
+  const cats = getAccountCategories(accountId, 'income');
+  if (!cats.some((c) => c.id === selectedSource)) selectedSource = '';
+  // Conserva el comportamiento anterior: "Otro" preseleccionado si existe
+  if (!selectedSource && cats.some((c) => c.id === 'other')) selectedSource = 'other';
+
+  wrap.innerHTML =
+    cats.map((s) => `<button type="button" class="chip-option ${s.id === selectedSource ? 'selected' : ''}" data-source="${escapeHtml(s.id)}">${escapeHtml(s.icon)} ${escapeHtml(s.label)}</button>`).join('') +
+    (cats.length ? '' : '<span class="cat-hint">Esta cuenta no tiene categorías de ingreso. Crea una.</span>') +
+    '<button type="button" class="chip-option chip-manage" data-manage="1">⚙️ Gestionar categorías</button>';
+
+  wrap.querySelectorAll('[data-source]').forEach((btn) => {
     btn.addEventListener('click', () => {
       selectedSource = btn.dataset.source;
-      wrap.querySelectorAll('.chip-option').forEach((b) => b.classList.remove('selected'));
+      wrap.querySelectorAll('[data-source]').forEach((b) => b.classList.remove('selected'));
       btn.classList.add('selected');
+      document.getElementById('err-inc-category').classList.remove('visible');
+    });
+  });
+  wrap.querySelector('[data-manage]').addEventListener('click', () => {
+    openCategoryManager(accountId, 'income', () => {
+      buildSourceOptions();
+      renderIncomes(); // por si se editó el nombre de una categoría en uso
     });
   });
 }
@@ -51,6 +78,11 @@ function bindIncomeForm() {
     }
     if (!accountId) {
       toggleField('err-inc-account', 'inc-account', true);
+      valid = false;
+    }
+    // [NUEVO] Toda entrada debe tener una categoría de la cuenta
+    if (!selectedSource) {
+      document.getElementById('err-inc-category').classList.add('visible');
       valid = false;
     }
     if (!valid) return;
@@ -84,11 +116,9 @@ function bindIncomeForm() {
 
     form.reset();
     document.getElementById('inc-date').value = todayIso();
-    selectedSource = 'other';
-    document.querySelectorAll('#inc-source-options .chip-option').forEach((b) =>
-      b.classList.toggle('selected', b.dataset.source === 'other')
-    );
+    selectedSource = '';
     populateAccountSelect(document.getElementById('inc-account'), getAccounts());
+    buildSourceOptions(); // [MODIFICADO] vuelve a pedir cuenta → categorías
     renderIncomes();
     showAlert('income-success', '✅ Entrada registrada. Saldo actualizado.', 'success');
   });

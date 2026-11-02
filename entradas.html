@@ -6,6 +6,7 @@
   <title>FinControl — Entradas</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/movimientos.css">
+  <link rel="stylesheet" href="css/categorias.css"> <!-- [NUEVO] categorías personalizadas -->
 </head>
 <body>
   <div class="app-layout">
@@ -60,9 +61,11 @@
               <span class="field-error" id="err-inc-account">Debes seleccionar una cuenta.</span>
             </div>
 
+            <!-- [MODIFICADO] Categorías personalizadas de ingreso (propias de cada cuenta) -->
             <div class="field full">
-              <label>Origen del ingreso</label>
+              <label>Categoría del ingreso <span class="req">*</span></label>
               <div class="chip-options" id="inc-source-options"></div>
+              <span class="field-error" id="err-inc-category">Selecciona una categoría.</span>
             </div>
 
             <div class="field full">
@@ -105,6 +108,7 @@
   <script src="js/theme.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/shared.js"></script>
+  <script src="js/categorias.js"></script> <!-- [NUEVO] -->
   <script src="js/entradas.js"></script>
 </body>
 </html>

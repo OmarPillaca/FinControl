@@ -6,6 +6,8 @@
   <title>FinControl — Mis cuentas</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/cuentas.css">
+  <link rel="stylesheet" href="css/movimientos.css"> <!-- [NUEVO] filas de transferencias recientes -->
+  <link rel="stylesheet" href="css/categorias.css"> <!-- [NUEVO] gestor de categorías -->
 </head>
 <body>
   <div class="app-layout">
@@ -100,6 +102,64 @@
         </form>
       </section>
 
+      <!-- ============ [NUEVO] Transferencias entre cuentas ============ -->
+      <section class="card" style="margin-bottom: 22px;" id="transfer-section">
+        <h2 class="section-title">🔄 Transferir entre cuentas</h2>
+
+        <div class="alert alert-error" id="transfer-alert"></div>
+        <div class="alert alert-success" id="transfer-success"></div>
+
+        <form id="transfer-form" novalidate>
+          <div class="form-grid">
+            <div class="field">
+              <label for="tr-from">Cuenta de origen <span class="req">*</span></label>
+              <select id="tr-from">
+                <option value="">— Selecciona una cuenta —</option>
+              </select>
+              <span class="field-hint" id="hint-tr-from"></span>
+              <span class="field-error" id="err-tr-from">Selecciona la cuenta de origen.</span>
+            </div>
+
+            <div class="field">
+              <label for="tr-to">Cuenta de destino <span class="req">*</span></label>
+              <select id="tr-to">
+                <option value="">— Selecciona una cuenta —</option>
+              </select>
+              <span class="field-hint" id="hint-tr-to"></span>
+              <span class="field-error" id="err-tr-to">Selecciona la cuenta de destino.</span>
+            </div>
+
+            <div class="field">
+              <label for="tr-amount">Monto <span class="req">*</span></label>
+              <input type="text" id="tr-amount" inputmode="decimal" placeholder="0.00">
+              <span class="field-error" id="err-tr-amount">Ingresa un monto mayor que cero.</span>
+            </div>
+
+            <div class="field">
+              <label for="tr-date">Fecha <span class="req">*</span></label>
+              <input type="date" id="tr-date">
+              <span class="field-error" id="err-tr-date">Selecciona una fecha.</span>
+            </div>
+
+            <div class="field full">
+              <label for="tr-desc">Descripción <span class="optional-hint">(opcional)</span></label>
+              <input type="text" id="tr-desc" maxlength="120" placeholder="Ej: Recarga de billetera, retiro de efectivo…">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Transferir</button>
+          </div>
+        </form>
+
+        <h3 class="section-title" style="margin-top: 20px;">🕐 Últimas transferencias</h3>
+        <div id="transfer-recent"></div>
+        <div id="transfer-recent-empty" class="empty-state" hidden>
+          <div class="empty-icon">🔄</div>
+          <p>Aún no hay transferencias. El historial completo está en <a href="movimientos.html"><strong>Movimientos</strong></a>.</p>
+        </div>
+      </section>
+
       <!-- Listado de cuentas -->
       <h2 class="section-title">📂 Cuentas registradas</h2>
       <div class="accounts-grid" id="accounts-grid"></div>
@@ -129,6 +189,8 @@
   <script src="js/theme.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/shared.js"></script>
+  <script src="js/categorias.js"></script> <!-- [NUEVO] -->
   <script src="js/cuentas.js"></script>
+  <script src="js/transferencias.js"></script> <!-- [NUEVO] -->
 </body>
 </html>

@@ -162,3 +162,79 @@ function accountName(accounts, id) {
   const acc = (accounts || []).find((a) => a.id === id);
   return acc ? acc.name : 'Cuenta eliminada';
 }
+
+/* =========================================================
+   [NUEVO] Billetera, transferencias y categorías por cuenta
+   Todo lo que sigue es ADICIONAL: no modifica ninguna función
+   anterior de este archivo.
+   ========================================================= */
+
+/** [NUEVO] Etiquetas de tipo de movimiento mostradas en el historial */
+const MOVEMENT_TYPE_LABELS = {
+  income:   'Ingreso',
+  expense:  'Gasto',
+  transfer: 'Transferencia',
+};
+
+/**
+ * [NUEVO] ¿La billetera cuenta en el monto global?
+ * Solo si está visible Y el usuario eligió incluirla.
+ */
+function isWalletCounted(walletSettings) {
+  return !!(walletSettings && walletSettings.visible && walletSettings.includeInTotal);
+}
+
+/** [NUEVO] Suma de saldos de las cuentas activas de tipo billetera */
+function sumWalletBalances(accounts) {
+  return sumByType(accounts, 'wallet');
+}
+
+/**
+ * [NUEVO] MONTO GLOBAL TOTAL
+ * = suma de cuentas activas que NO son billetera
+ *   + saldo de la billetera (solo si está visible y configurada para incluirse)
+ */
+function computeGlobalTotal(accounts, walletSettings) {
+  const active = (accounts || []).filter((a) => a.status === 'active');
+  const regular = active
+    .filter((a) => a.type !== 'wallet')
+    .reduce((s, a) => s + (Number(a.balance) || 0), 0);
+  const wallet = isWalletCounted(walletSettings) ? sumWalletBalances(active) : 0;
+  return regular + wallet;
+}
+
+/**
+ * [NUEVO] Resuelve la categoría de un movimiento.
+ * Prioridad: categoría actual de la cuenta (refleja ediciones) →
+ * nombre guardado en el movimiento (si la categoría fue eliminada) →
+ * lista fija original (movimientos antiguos).
+ */
+function resolveMovementCategory(movement, accounts) {
+  if (movement.type === 'transfer') {
+    return { id: 'transfer', label: 'Entre cuentas', icon: '🔄' };
+  }
+  const kind = movement.type === 'income' ? 'income' : 'expense';
+  const catId = kind === 'income' ? movement.source : movement.category;
+  const acc = (accounts || []).find((a) => a.id === movement.accountId);
+  const list = acc && acc.categories ? acc.categories[kind] : null;
+  const found = list && list.find((c) => c.id === catId);
+  if (found) return found;
+  if (movement.categoryName) {
+    return { id: catId, label: movement.categoryName, icon: movement.categoryIcon || '🏷️' };
+  }
+  return kind === 'income' ? getIncomeSource(catId) : getCategory(catId);
+}
+
+/** [NUEVO] Texto "Origen → Destino" de una transferencia */
+function transferLabel(movement, accounts) {
+  return `${accountName(accounts, movement.accountId)} → ${accountName(accounts, movement.toAccountId)}`;
+}
+
+/** [NUEVO] Convierte la fecha de un <input type="date"> en timestamp (hora actual) */
+function timestampFromDateInput(dateIso) {
+  if (!dateIso || dateIso === todayIso()) return Date.now();
+  const d = new Date(dateIso + 'T12:00:00');
+  const now = new Date();
+  d.setHours(now.getHours(), now.getMinutes(), 0, 0);
+  return d.getTime();
+}

@@ -1,0 +1,141 @@
+/* =========================================================
+   categorias.css — Categorías personalizadas (FinControl)
+   [NUEVO] Reutiliza las variables y componentes de base.css.
+   ========================================================= */
+
+.cat-modal { max-width: 480px; }
+
+.cat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.cat-head h2 { margin-bottom: 0; }
+
+.cat-modal .cat-sub { margin-bottom: 12px; font-size: 0.85rem; }
+.cat-modal .cat-sub strong { color: var(--text); }
+
+/* Pestañas Ingresos / Gastos */
+.cat-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+
+.cat-tab {
+  flex: 1;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cat-tab:hover { border-color: var(--cian); }
+
+.cat-tab.selected {
+  border-color: var(--cian);
+  background: rgba(0, 184, 217, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+}
+
+/* Lista de categorías */
+.cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-bottom: 14px;
+}
+
+.cat-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.cat-row .cat-icon { font-size: 1.1rem; width: 26px; text-align: center; }
+.cat-row .cat-name { flex: 1; min-width: 0; font-weight: 600; font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.cat-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  font-size: 0.9rem;
+  display: grid;
+  place-items: center;
+  transition: border-color 0.15s;
+}
+
+.cat-btn:hover { border-color: var(--cian); }
+.cat-btn.danger:hover { border-color: var(--expense); }
+
+.cat-empty {
+  text-align: center;
+  color: var(--text-2);
+  font-size: 0.88rem;
+  padding: 16px 8px;
+}
+
+/* Confirmación de eliminación */
+.cat-confirm {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.cat-confirm.warn { background: var(--expense-bg); border-color: var(--expense); }
+.cat-confirm p { margin-bottom: 10px; font-size: 0.88rem; color: var(--text); }
+.cat-confirm-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+/* Selector de icono */
+.cat-emojis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.cat-emoji {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface-2);
+  font-size: 1.05rem;
+  display: grid;
+  place-items: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cat-emoji:hover { border-color: var(--cian); }
+
+.cat-emoji.selected {
+  border-color: var(--cian);
+  background: rgba(0, 184, 217, 0.12);
+  box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+}
+
+/* Aviso dentro de los formularios de entradas / salidas */
+.cat-hint {
+  font-size: 0.85rem;
+  color: var(--text-2);
+  padding: 8px 2px;
+}
+
+/* Botón "Gestionar" junto a los chips de categoría */
+.chip-option.chip-manage {
+  border-style: dashed;
+  color: var(--text-2);
+}

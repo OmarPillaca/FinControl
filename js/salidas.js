@@ -7,24 +7,48 @@ const showModal = setupConfirmModal();
 
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('exp-date').value = todayIso();
-  buildCategoryOptions();
   populateAccountSelect(document.getElementById('exp-account'), getAccounts());
+  buildCategoryOptions();
+  // [NUEVO] Al cambiar de cuenta se muestran SUS categorías de gasto
+  document.getElementById('exp-account').addEventListener('change', buildCategoryOptions);
   bindExpenseForm();
   renderExpenses();
 });
 
+/**
+ * [MODIFICADO] Chips de categorías de gasto de la cuenta seleccionada
+ * (antes era una lista fija). Incluye acceso al gestor de categorías.
+ */
 function buildCategoryOptions() {
   const wrap = document.getElementById('exp-category-options');
-  wrap.innerHTML = EXPENSE_CATEGORIES.map(
-    (c) => `<button type="button" class="chip-option" data-cat="${c.id}">${c.icon} ${c.label}</button>`
-  ).join('');
+  const accountId = document.getElementById('exp-account').value;
 
-  wrap.querySelectorAll('.chip-option').forEach((btn) => {
+  if (!accountId) {
+    selectedCategory = '';
+    wrap.innerHTML = '<span class="cat-hint">Selecciona una cuenta para ver sus categorías de gasto.</span>';
+    return;
+  }
+
+  const cats = getAccountCategories(accountId, 'expense');
+  if (!cats.some((c) => c.id === selectedCategory)) selectedCategory = '';
+
+  wrap.innerHTML =
+    cats.map((c) => `<button type="button" class="chip-option ${c.id === selectedCategory ? 'selected' : ''}" data-cat="${escapeHtml(c.id)}">${escapeHtml(c.icon)} ${escapeHtml(c.label)}</button>`).join('') +
+    (cats.length ? '' : '<span class="cat-hint">Esta cuenta no tiene categorías de gasto. Crea una.</span>') +
+    '<button type="button" class="chip-option chip-manage" data-manage="1">⚙️ Gestionar categorías</button>';
+
+  wrap.querySelectorAll('[data-cat]').forEach((btn) => {
     btn.addEventListener('click', () => {
       selectedCategory = btn.dataset.cat;
-      wrap.querySelectorAll('.chip-option').forEach((b) => b.classList.remove('selected'));
+      wrap.querySelectorAll('[data-cat]').forEach((b) => b.classList.remove('selected'));
       btn.classList.add('selected');
       document.getElementById('err-exp-category').classList.remove('visible');
+    });
+  });
+  wrap.querySelector('[data-manage]').addEventListener('click', () => {
+    openCategoryManager(accountId, 'expense', () => {
+      buildCategoryOptions();
+      renderExpenses(); // por si se editó el nombre de una categoría en uso
     });
   });
 }
@@ -90,10 +114,8 @@ function bindExpenseForm() {
     form.reset();
     document.getElementById('exp-date').value = todayIso();
     selectedCategory = '';
-    document.querySelectorAll('#exp-category-options .chip-option').forEach((b) =>
-      b.classList.remove('selected')
-    );
     populateAccountSelect(document.getElementById('exp-account'), getAccounts());
+    buildCategoryOptions(); // [MODIFICADO] vuelve a pedir cuenta → categorías
     renderExpenses();
     showAlert('expense-success', '✅ Salida registrada. Saldo actualizado.', 'success');
   });

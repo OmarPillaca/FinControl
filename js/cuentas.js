@@ -122,6 +122,14 @@ function renderAccounts() {
   grid.innerHTML = accounts.map(renderAccountCard).join('');
   empty.hidden = accounts.length > 0;
 
+  // [NUEVO] Mantener al día los selectores y la lista de transferencias (transferencias.js)
+  if (typeof refreshTransferUI === 'function') refreshTransferUI();
+
+  // [NUEVO] Gestionar categorías personalizadas de la cuenta
+  grid.querySelectorAll('[data-cats]').forEach((btn) => {
+    btn.addEventListener('click', () => openCategoryManager(btn.dataset.cats, 'expense'));
+  });
+
   // Acción eliminar → papelera (con advertencia si tiene movimientos)
   grid.querySelectorAll('[data-del]').forEach((btn) => {
     btn.addEventListener('click', () => {
@@ -166,6 +174,15 @@ function renderAccountCard(account) {
     }
   }
 
+  // [NUEVO] Estado de la billetera (visibilidad e inclusión en el total)
+  let walletInfo = '';
+  if (account.type === 'wallet') {
+    const ws = getWalletSettings();
+    walletInfo = `
+      <div class="card-meta"><span>Panel principal:</span><span>${ws.visible ? '👁️ Visible' : '🙈 Oculta'}</span></div>
+      <div class="card-meta"><span>Monto total:</span><span>${isWalletCounted(ws) ? '✅ Incluida' : '➖ No incluida'}</span></div>`;
+  }
+
   return `
     <div class="account-card">
       <div class="acc-head">
@@ -179,9 +196,11 @@ function renderAccountCard(account) {
       <div class="acc-details">
         <div class="card-meta"><span>Estado:</span><span>${account.status === 'active' ? '✅ Activa' : '⏸️ Inactiva'}</span></div>
         ${cardInfo}
+        ${walletInfo}
         ${account.notes ? `<div class="card-meta"><span>Nota:</span><span>${escapeHtml(account.notes)}</span></div>` : ''}
       </div>
       <div class="acc-actions">
+        <button class="btn btn-outline btn-sm" data-cats="${account.id}">🏷️ Categorías</button>
         <button class="btn btn-danger btn-sm" data-del="${account.id}">🗑️ Eliminar</button>
       </div>
     </div>`;

@@ -66,13 +66,21 @@ function bindEmptyTrash() {
 
 function renderTrashItem(entry) {
   const isMovement = entry.kind === 'movement';
+  const isTransfer = isMovement && entry.data.type === 'transfer'; // [NUEVO]
+  const accounts = getAccounts();
+  // [MODIFICADO] icono también para transferencias
   const icon = isMovement
-    ? (entry.data.type === 'income' ? '⬆️' : getCategory(entry.data.category).icon)
+    ? (entry.data.type === 'income' ? '⬆️' : isTransfer ? '🔄' : resolveMovementCategory(entry.data, accounts).icon)
     : getAccountType(entry.data.type).icon;
   const kindLabel = isMovement ? 'Movimiento' : 'Cuenta';
+  const sign = entry.data.type === 'income' ? '+' : entry.data.type === 'transfer' ? '⇄' : '−';
   const amountBadge = isMovement
-    ? `<span class="mov-amount ${entry.data.type}" style="font-weight:700">${entry.data.type === 'income' ? '+' : '−'} ${formatCurrency(entry.data.amount)}</span>`
+    ? `<span class="mov-amount ${entry.data.type}" style="font-weight:700">${sign} ${formatCurrency(entry.data.amount)}</span>`
     : '';
+  // [MODIFICADO] en transferencias se muestra "Origen → Destino"
+  const accountText = isTransfer
+    ? transferLabel(entry.data, accounts)
+    : (isMovement ? accountName(accounts, entry.data.accountId) : '');
 
   return `
     <div class="trash-item">
@@ -82,7 +90,7 @@ function renderTrashItem(entry) {
         <div class="trash-meta">
           <span class="kind-badge">${kindLabel}</span>
           <span>🗑️ ${formatDateTime(entry.deletedAt)}</span>
-          ${isMovement ? `<span>🏦 ${escapeHtml(accountName(getAccounts(), entry.data.accountId))}</span>` : ''}
+          ${isMovement ? `<span>🏦 ${escapeHtml(accountText)}</span>` : ''}
         </div>
       </div>
       <div class="trash-actions">
@@ -95,9 +103,10 @@ function renderTrashItem(entry) {
 function trashItemTitle(entry) {
   if (entry.kind === 'movement') {
     const m = entry.data;
+    // [MODIFICADO] usa categorías personalizadas y soporta transferencias
     return (
       m.description ||
-      (m.type === 'income' ? getIncomeSource(m.source).label : getCategory(m.category).label)
+      (m.type === 'transfer' ? 'Transferencia' : resolveMovementCategory(m, getAccounts()).label)
     );
   }
   return entry.data.name;

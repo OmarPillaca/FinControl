@@ -36,16 +36,38 @@ function renderMiniAccount(account) {
     </div>`;
 }
 
-/** Fila de movimiento (usada en inicio y listas) */
+/**
+ * Fila de movimiento (usada en inicio y listas)
+ * [MODIFICADO] Ahora muestra: tipo (ingreso/gasto/transferencia), categoría,
+ * cuenta (en transferencias "Origen → Destino"), fecha e importe.
+ * options.perspective = [ids de cuenta]: al filtrar por cuenta, las
+ * transferencias se muestran con + (entra) o − (sale) según esa vista.
+ */
 function renderMovementRow(movement, accounts, options) {
   const opts = options || {};
   const isIncome = movement.type === 'income';
-  const icon = isIncome ? '⬆️' : getCategory(movement.category).icon;
-  const desc =
-    movement.description ||
-    (isIncome ? getIncomeSource(movement.source).label : getCategory(movement.category).label);
-  const sign = isIncome ? '+' : '−';
+  const isTransfer = movement.type === 'transfer'; // [NUEVO]
+  const cat = resolveMovementCategory(movement, accounts); // [NUEVO]
+  const icon = isTransfer ? '🔄' : (isIncome ? '⬆️' : cat.icon);
+  const desc = movement.description || (isTransfer ? 'Transferencia' : cat.label);
   const showDelete = opts.onDelete !== undefined;
+
+  // Signo e importe (las transferencias son neutras salvo que haya perspectiva de cuenta)
+  let sign = isIncome ? '+' : '−';
+  let amountClass = '';
+  if (isTransfer) {
+    const ids = opts.perspective || [];
+    const fromIn = ids.includes(movement.accountId);
+    const toIn = ids.includes(movement.toAccountId);
+    if (toIn && !fromIn) { sign = '+'; amountClass = ' in'; }
+    else if (fromIn && !toIn) { sign = '−'; amountClass = ' out'; }
+    else sign = '⇄';
+  }
+
+  const accountText = isTransfer
+    ? transferLabel(movement, accounts)
+    : accountName(accounts, movement.accountId);
+  const typeLabel = MOVEMENT_TYPE_LABELS[movement.type] || 'Movimiento';
 
   return `
     <div class="mov-row ${movement.type}" data-id="${movement.id}">
@@ -53,11 +75,13 @@ function renderMovementRow(movement, accounts, options) {
       <div class="mov-info">
         <div class="mov-desc">${escapeHtml(desc)}</div>
         <div class="mov-meta">
-          <span>🏦 ${escapeHtml(accountName(accounts, movement.accountId))}</span>
+          <span class="mov-badge ${movement.type}">${typeLabel}</span>
+          <span>🏷️ ${escapeHtml(cat.label)}</span>
+          <span>🏦 ${escapeHtml(accountText)}</span>
           <span>🕐 ${formatDateTime(movement.date)}</span>
         </div>
       </div>
-      <div class="mov-amount">${sign} ${formatCurrency(movement.amount)}</div>
+      <div class="mov-amount${amountClass}">${sign} ${formatCurrency(movement.amount)}</div>
       ${showDelete ? `<div class="mov-actions"><button class="btn-del" data-del="${movement.id}" title="Enviar a la papelera">🗑️</button></div>` : ''}
     </div>`;
 }

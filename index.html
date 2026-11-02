@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/inicio.css">
   <link rel="stylesheet" href="css/movimientos.css">
+  <link rel="stylesheet" href="css/configuracion.css"> <!-- [NUEVO] estilo del interruptor (.switch-btn) de la billetera -->
 </head>
 <body>
   <div class="app-layout">
@@ -41,6 +42,8 @@
         <div class="total-label">Total disponible</div>
         <div class="total-amount" id="total-general">S/ 0.00</div>
         <div class="total-sub" id="total-sub">Suma de todas tus cuentas</div>
+        <!-- [NUEVO] Indicador: billetera incluida / excluida / oculta -->
+        <div class="wallet-indicator" id="wallet-indicator"></div>
       </section>
 
       <!-- Mini totales -->
@@ -60,6 +63,26 @@
         <div class="stat-card stat-expense">
           <div class="stat-label">⬇️ Salidas</div>
           <div class="stat-value" id="total-expenses">S/ 0.00</div>
+        </div>
+      </section>
+
+      <!-- ============ [NUEVO] Tarjeta de Billetera ============
+           Solo se muestra si la billetera está configurada como "visible". -->
+      <section class="wallet-card" id="wallet-section" hidden>
+        <div class="wallet-main">
+          <div class="wallet-icon">📱</div>
+          <div class="wallet-info">
+            <div class="wallet-title">Billetera</div>
+            <div class="wallet-balance" id="wallet-balance">S/ 0.00</div>
+            <div class="wallet-detail" id="wallet-detail"></div>
+          </div>
+        </div>
+        <div class="wallet-toggle">
+          <button class="switch-btn on" id="wallet-include-switch" type="button" role="switch"
+                  aria-checked="true" aria-label="Incluir billetera en el total">
+            <span class="knob"></span>
+          </button>
+          <span class="wallet-toggle-label" id="wallet-include-label">Incluida en el total</span>
         </div>
       </section>
 

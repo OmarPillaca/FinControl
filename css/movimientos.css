@@ -149,3 +149,35 @@
   color: var(--text-2);
   font-weight: 400;
 }
+
+/* =========================================================
+   [NUEVO] Transferencias y distintivos de tipo
+   ========================================================= */
+
+/* Distintivo de tipo: Ingreso / Gasto / Transferencia */
+.mov-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.mov-badge.income { color: var(--income); }
+.mov-badge.expense { color: var(--expense); }
+.mov-badge.transfer { color: var(--azul); }
+[data-theme="dark"] .mov-badge.transfer { color: var(--celeste); }
+
+/* Fila de transferencia */
+.mov-row.transfer .mov-icon { background: rgba(0, 184, 217, 0.15); }
+.mov-row.transfer .mov-amount { color: var(--azul); }
+[data-theme="dark"] .mov-row.transfer .mov-amount { color: var(--celeste); }
+
+/* Con filtro por cuenta: entra (+) / sale (−) */
+.mov-row.transfer .mov-amount.in { color: var(--income); }
+.mov-row.transfer .mov-amount.out { color: var(--expense); }
